@@ -1,0 +1,25 @@
+= render(partial: 'bottom_menu')  
+#full_form_button.canceled
+  = render(partial: 'form', locals: {url: url_for(action: 'create')})
+
+- if @threads.empty?
+  %center Тут пусто, нет ничего вообще.
+- else
+  = render(partial: 'thread', collection: @threads)
+  / - @threads.each do |thread|
+  /   - tag_hidden = false
+  /   - thread.tags.each do |tag|
+  /     - if @user.hidden.include?(tag.alias) and @tag != tag
+  /       - tag_hidden = true
+  /       - break
+  /   .thread_container.on_index
+  /     - if @user.hidden.include?(thread.rid) or tag_hidden
+  /       = render(partial: 'thread_hidden', object: thread, locals: {tag_hidden: tag_hidden})
+  /     - else
+  /       = render(partial: 'thread', object: thread)
+  /   %br
+  /   %br
+  /   %br
+%br
+- unless params[:action] == 'favorites'
+  = render(partial: 'pages', object: @threads)

@@ -1,0 +1,14 @@
+#bottom_menu
+  - if @user.settings[:show_up_button] == true
+    %a{id: 'up_button', href: '#'}<>
+      = t('interface.up')
+    %a{id: 'down_button', href: '#'}<>
+      = t('interface.down')
+  - if params[:action] == 'show'
+    %a{id: 'refresh_button', href: url_for(action: 'refresh', rid: @thread.rid)}<>
+      = t('interface.refresh')
+  %a{id: 'reply_button', href: '#'}<>
+    - if params[:action] == 'show'
+      = t('interface.reply')
+    - else
+      = t('interface.create_thread')

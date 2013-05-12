@@ -1,0 +1,34 @@
+.pages
+  = t('interface.pages')
+  - total = pages.total_pages
+  - page = pages.current_page
+  - limit = 2
+  -unless page == 1
+    %a{href: url_for(controller: 'threads', action: 'index', trailing_slash: true)}= 1
+  -between = (1 + page)-3
+  -if between > limit+1
+    \...
+    - (page-limit-1).upto(page-1) do |i|
+      %a{href: url_for(action: 'page', page: i)}= i
+  -else
+    - 2.upto(page-1) do |i|
+      %a{href: url_for(action: 'page', page: i)}= i 
+  -if page == 1
+    %a{href: url_for(action: 'index', trailing_slash: true), class: 'current'}= 1
+  -else
+    %a{href: url_for(action: 'page'), class: 'current'}= page
+  -if page < total-1
+    -hui = (total - page) - 1
+    -if hui > limit
+      -between = page +2
+      - (page+1).upto(between+1) do |i|
+        %a{href: url_for(action: 'page', page: i)}= i
+      -x = (total - (page+limit))
+      -if x > 2
+        \...
+    -else
+      -between = hui
+      - (page+1).upto(page+between) do |i|
+        %a{href: url_for(action: 'page', page: i)}= i
+  -if page != total
+    %a{href: url_for(action: 'page', page: total)}= total

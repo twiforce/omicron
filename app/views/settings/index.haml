@@ -1,0 +1,63 @@
+= form_tag(url_for(controller: 'settings', action: 'index', trailing_slash: true), method: 'post', id: 'settings') do
+  .errors= render(partial: 'threads/errors')
+  %h3 Внешний вид:
+  #view_params.post
+    Стиль: 
+    %select{name: 'style'}
+      -@user.settings[:style] = 'omicron' if @user.settings[:style] == nil
+      %option{value: 'omicron', selected: (@user.settings[:style] == 'omicron')}      Omicron
+      %option{value: 'photon', selected: (@user.settings[:style] == 'photon')}        Photon
+      %option{value: 'twilight', selected: (@user.settings[:style] == 'twilight')}    Twilight
+      /%option{value: 'mlp', selected: (@user.settings[:style] == 'mlp')}              My Little Pony
+    %br
+    %br
+    Показывать по 
+    %input{type: 'text', name: 'threads_per_page', value: @user.settings[:threads_per_page]}
+    тредов на странице, и по 
+    %input{type: 'text', name: 'posts_per_thread', value: @user.settings[:posts_per_thread]}
+    постов после каждого треда.
+    %br
+    Шрифт в тредах и постах: 
+    %input{type: 'text', name: 'fontsize', value: (@user.settings[:fontsize] or 16)}
+    %br
+    %br
+    %input{type: 'checkbox', name: 'show_up_button', checked: @user.settings[:show_up_button], id: 'show_up_button'}
+    %label{for: 'show_up_button'} показывать кнопки &laquo;вверх&raquo; и &laquo;вниз&raquo;.
+    %br
+    -checked = @user.settings[:fixed_header]
+    -checked = true if @user.settings[:fixed_header] == nil
+    %input{type: 'checkbox', name: 'fixed_header', checked: checked, id: 'fixed_header'}
+    %label{for: 'fixed_header'} закрепить меню (всегда сверху экрана).
+    %br
+    %label
+      - @user.settings[:enable_shadows] = true if @user.settings[:enable_shadows] == nil
+      %input{type: 'checkbox', name: 'enable_shadows', checked: @user.settings[:enable_shadows]}
+      показывать тени (они могут замедлять прокрутку)
+  %h3 AJAX:
+  #ajax_settings.post
+    %label
+      %input{type: 'checkbox', name: 'scroll_after_post', checked: (@user.settings[:scroll_after_post] or true)}
+      перематывать страницу к новому посту после его написания
+    %br
+    %label
+      %input{type: 'checkbox', name: 'autorefresh_enabled', checked: @user.settings[:autorefresh_enabled]}
+      автоматически обновлять треды
+  %h3 Фильтр контента:
+  #hide_tags.post
+    Треды с тэгами, которые отмечены галочкой, будут автоматически скрыты в обзоре.
+    %br
+    %input{type: 'hidden', name: 'tags[hui]'}
+    -Tag.all.each do |tag|
+      %input{type: 'checkbox', name: "tags[#{tag.alias}]", id: "tag_#{tag.alias}", checked: (@user.hidden.include? tag.alias)}
+      %label{for: "tag_#{tag.alias}"}= "/#{tag.alias}/ #{tag.name}"
+      %br
+    %br
+    %input{type: 'checkbox', name: 'full_hiding', checked: (@user.settings[:full_hiding] or false), id: 'full_hiding'}
+    %label{for: 'full_hiding'} 
+      %b &laquo;жесткое&raquo; скрытие
+    %br
+    Если жесткое скрытие включено, то скрытые вами треды полностью исчезают с ваших глаз, безо всяких
+    напоминаний. Это также распространяется на треды в скрытых вами тэгах. Осторожно! Треды, в которых есть
+    хотя бы один из скрытых вами тэгов, не будут отображаться в обзоре <b>вообще</b>.
+
+  %input{type: 'submit', value: 'Сохранить', class: 'submit_button'}

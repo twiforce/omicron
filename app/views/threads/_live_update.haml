@@ -1,0 +1,6 @@
+- live_update.each do |object|
+  .container{rid: object.rid}
+    - if object.kind_of?(RThread)
+      = render(partial: 'thread', object: object) 
+    - else
+      = render(partial: 'post', object: object)

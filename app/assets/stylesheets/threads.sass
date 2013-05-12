@@ -1,0 +1,532 @@
+#full_form_button
+  width: 700px
+  padding: 12px
+  border: 1px solid #ccc
+  background: #eee
+  box-shadow: 0 1px 3px #d7d7d7
+  display: table
+  margin: 0 auto
+  padding: 9px
+  text-align: center
+  margin-bottom: 40px
+  margin-top: 40px
+  border-radius: 7px
+  .fake_link
+    span
+      font-weight: bold
+      color: #F60
+  &.canceled
+    border: none
+    background: none
+    box-shadow: none
+    margin: 0 auto
+
+
+#qr_form
+  display: table
+  margin: 0 auto
+  text-align: left
+  width: 600px
+  color: white
+  z-index: 9999
+  padding: 15px
+  padding-top: 5px
+  padding-bottom: 5px
+  padding-right: 25px
+  .video_field
+    display: none
+  #video_span, #file_span
+    text-decoration: underline
+    color: #AAA
+    cursor: pointer
+    &:hover, &.selected
+      color: white
+      text-shadow: 0 0 0.1em #fff
+  .mini
+    font-size: 14px
+    color: #aaa
+  .password_field
+    width: 50px
+  #sage
+    margin-right: 20px
+  input, textarea
+    padding: 3px
+    font-family: "Trebuchet MS", Trebuchet
+    font-size: 13px
+    background: #222
+    border: none
+    border-bottom: 1px solid #aaa
+    color: #aaa
+  .divider
+    clear: both
+    margin-bottom: 5px
+    display: table
+    width: 100%
+    .left
+      float: left
+    .right
+      float: right
+    &.disclaimer
+      cursor: default
+  .form_title
+    float: left
+    width: 80%
+  .form_submit
+    float: right
+    color: white
+    border: 1px solid #aaa
+    &:hover
+      cursor: pointer
+      text-shadow: 0 0 0.1em #fff
+  textarea
+    border: 1px solid #aaa
+    width: 630px
+    max-width: 630px
+    height: 200px
+    max-height: 200px
+    color: white
+  .file_field
+    border: none
+    max-width: 210px    
+  .editbox
+    color: #aaa
+    a
+      color: white
+      &:hover
+        text-shadow: 0 0 0.1em #fff
+
+  
+.thread, .post
+  background: #e5e5e5
+  border: 1px solid #c9c9c9
+  box-shadow: 0 1px 3px #d7d7d7
+  margin-bottom: 5px
+
+.thread
+  border: none
+  box-shadow: none
+  background: none
+
+.thread, .post
+  blockquote
+    font-size: 16px
+    min-width: 500px
+    padding-left: 5px
+    padding-bottom: 5px
+  img, .video
+    float: left
+.thread_header, .post_header
+  padding: 3px 5px 3px 5px
+  font-size: 14px
+  // background: #444
+  // color: #ccc
+.thread_header
+  margin-bottom: 4px
+  display: table
+  span
+    margin-left: 15px
+    &.right
+      float: right
+      margin-right: 0
+      font-weight: bold
+  //   &.file_info a
+  //     color: #aaa
+  // a, a:visited
+  //   color: #fff
+  //   &:hover
+  //     color: #5bf
+  //     text-decoration: none
+
+
+.post_container
+  &.hidden .post
+    padding: 10px
+  display: table
+.post, .preview .thread
+  margin-top: 3px
+  display: table
+  padding: 10px
+  padding-top: 0px
+  min-width: 400px
+.post_header, .preview .thread_header
+  margin-bottom: 5px
+  font-size: 14px
+  padding-bottom: 0
+  color: #666
+  background: none
+  span 
+    margin-right: 10px
+    a, a:visited
+      color: #444
+      &:hover
+        text-decoration: none
+        color: #777
+
+a.post_link
+  font-weight: bold
+  color: #333
+  text-decoration: none
+  &:hover
+    color: #888
+
+.captcha_field
+  margin-top: 10px
+  float: none
+  padding: 0
+  input
+    width: 150px
+  span
+    font-size: 12px
+    color: red
+    clear: both
+    display: block
+
+.post, .thread
+  .post_link, .context_link 
+    display: inline-block
+    padding-left: 1px
+    padding-right: 1px
+    a
+      color: #044983
+      &:hover
+        color: #06f
+
+.thread_container.hidden
+  color: #666
+  font-size: 14px
+  padding: 10px
+  display: table
+
+.thread .title
+  //font-weight: bold
+  color: black
+  font-size: 18px
+  margin-bottom: 5px
+  &:hover
+    color: #555
+    text-decoration: none
+
+
+.post_header .title
+  font-weight: bold
+  color: #333
+
+.pages
+  color: #555
+  margin-top: 20px
+  a 
+    display: inline-block
+    padding: 2px 8px 2px 8px
+    text-decoration: none
+    &:hover
+      text-decoration: underline
+    &.current
+      background: #333
+      border: 1px solid #555
+      color: #fff
+      font-weight: bold
+      &:hover
+        text-decoration: none
+
+.replies_rids
+  font-size: 12px
+  font-style: italic
+  color: #666
+  margin-top: 10px
+
+.sage
+  color: red
+  font-style: italic
+  font-weight: bold
+
+.post.highlighted
+  border: 1px dashed #666
+  background: #ddd
+
+.thread_container, #thread_container
+  margin-top: 15px
+  display: table
+  width: 100%
+  clear: both
+
+#delete_disclaimer
+  margin: 50px
+  margin-top: 100px
+  h2, p, form
+    text-align: center
+  .post_container
+    margin: 0 auto
+    margin-top: 20px
+  .errors
+    display: table
+    margin: 0 auto
+    margin-bottom: 15px
+
+
+.proofmark
+  background: #97E67E
+  display: inline-block
+  color: #2d4626
+  a
+    color: #006600
+    &:hover
+      color: #003300
+
+.admin_proofmark
+  display: inline-block
+  color: red
+  font-weight: bold
+
+
+
+.post_link, .proofmark, .context_link
+  position: relative
+  display: inline-block
+
+#previews
+  position: static
+
+.preview
+  display: block
+  font-size: 14px
+  max-width: 90%
+  max-height: 40%
+  p
+    padding: 4px
+    background: #444
+    color: white
+    opacity: 0.9
+  .post, .thread
+    display: table
+    max-width: 60%
+    position: relative
+    margin: 5px
+    z-index: 9000
+    color: #000
+    font-style: normal
+    margin: 0
+  .thread
+    background: #e5e5e5
+    border: 1px solid #ccc
+    padding: 5px
+  .post_header
+    font-size: 14px
+    padding-bottom: 0
+    color: #666
+    background: none
+    a, a:visited
+      color: #444
+      &:hover
+        text-decoration: none
+        color: #777
+
+
+
+#tag_field
+  width: 30px
+  margin-right: 10px
+
+.taglist a:hover
+  text-decoration: none
+
+#refreshing_message
+  display: none
+  float: left
+  color: white
+  padding-left: 5px
+  padding-right: 5px
+  margin-right: 20px
+
+.pic_loading
+  background: #222
+  color: white
+  display: table
+  position: absolute
+  padding: 3px
+  font-size: 12px
+  opacity: 0
+
+.video_url
+  position: relative
+  display: block
+  width: 320
+  height: 240
+  img
+    position: relative
+    z-index: 1
+  .play_img
+    position: absolute
+    z-index: 2
+    display: table
+
+.expand_text_button
+  text-decoration: underline
+  font-size: 14px
+
+
+#live_container
+  display: table
+  width: 800px
+  margin: 0 auto
+  .container
+    margin-bottom: 25px
+    display: table
+    width: 100%
+    .post_container, .thread
+      width: 100%
+      .post
+        margin: 0
+        width: 100%
+
+
+.context_link
+  float: right
+  font-size: 12px
+  a
+    color: #aaa !important
+    font-style: italic
+    &:hover
+      color: #333 !important
+
+.file_container
+  position: relative
+  float: left
+  margin-right: 7px
+  img, .video_preview, .video
+    margin: 0
+    padding: 0
+    display: table
+    //max-width: 320px
+  .file_info
+    text-align: center
+    position: absolute
+    z-index: 3
+    width: 100%
+    background: #222
+    opacity: 0
+    left: 0
+    bottom: 0
+    font-size: 12px
+    font-style: italic
+    color: #ccc
+    a
+      color: #ddd
+      &:hover
+        color: white
+
+.thread
+  position: relative
+  display: table
+  width: 100%
+  .thread_info
+    font-size: 12px
+    color: #777
+    display: block
+  .thread_body
+    display: table
+    border-bottom: 1px solid #c9c9c9
+    width: 100%
+  .thread_header
+    font-size: 10px
+    background: #e5e5e5
+    border: 1px solid #c9c9c9
+    float: right
+    border-top: none
+    span
+      margin: 0
+      width: 110px
+      display: table
+      float: left
+      text-align: center
+      &.replies_info
+        width: 160px
+    a
+      color: #555
+      font-family: Verdana, sans-serif
+      &:hover
+        color: black
+        text-decoration: none
+.thread_container 
+  margin: 0 auto
+  display: block
+  margin-bottom: 50px
+  .thread
+    width: 100%
+#live_container .thread_body, .preview .thread_body
+  border: none
+
+.manage_container
+  position: relative
+  display: inline-block
+  font-family: Verdana, sans-serif
+  .manage_button
+    text-decoration: none
+    opacity: 0
+    margin: 0
+    font-weight: bold
+    font-size: 12px
+    color: #444
+    &:hover
+      color: red !important
+  .manage_menu
+    position: absolute
+    z-index: 9009
+    display: none
+    padding: 5px
+    right: 0
+    top: 15px
+    a
+      display: block
+      text-decoration: none
+      text-align: right
+      color: #aaa
+      font-size: 10px
+      &:hover
+        color: white
+        text-decoration: underline
+
+
+
+#new
+  margin: 5px
+  color: #666
+  font-style: italic
+
+.fav_button, .hide_button, .qr_link
+  display: inline-block
+  margin-left: 15px
+
+.hidden_disclaimer
+  color: #666
+  font-size: 12px
+  font-style: italic
+
+.thread.hidden
+  font-size: 12px 
+  padding: 5px
+  display: table
+  width: auto
+  margin-bottom: 50px
+
+.post, .thread 
+  textarea
+    margin: 5px
+    background: none
+    float: left
+    border: 1px solid #777
+    font-size: inherit
+    font-family: inherit
+
+
+.omitted
+  margin-top: 6px
+  padding: 10px
+  text-align: center
+  font-size: 14px
+  background: #eee
+  border: 1px dashed #888
+  display: table
+  a 
+    font-style: italic
+    &:hover
+      text-decoration: none    

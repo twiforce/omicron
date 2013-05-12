@@ -1,0 +1,25 @@
+.thread_hidden{id: "i#{thread_hidden.rid}"}
+  = "#{t('interface.hidden1')}"
+  %a{href: url_for(action: 'show', rid: thread_hidden.rid, format: 'html')}<
+    ="##{thread_hidden.rid}"
+  &mdash;
+  -if thread_hidden.title.empty?
+    = "#{t('interface.no_title')},"
+  -else
+    = "«#{thread_hidden.title}»,"
+  = verbose_replies(thread_hidden.replies_count) + '.'
+  &nbsp;
+  - unless tag_hidden
+    [
+    %a{class: 'unide_button', href: url_for(action: 'unhide', rid: thread_hidden.rid)}<>
+      = t('interface.unhide')
+    ]
+    &nbsp;
+  %span.taglist
+    = t('interface.tags') + ":"
+    -thread_hidden.tags.each do |tag|
+      %a{href: url_for(controller: 'threads', tag: tag.alias, trailing_slash: true)}<
+        = "/#{tag.alias}/"
+  - if tag_hidden
+    &nbsp;
+    %i= "(#{t('interface.tag_hidden')})"

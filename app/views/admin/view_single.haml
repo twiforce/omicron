@@ -1,0 +1,52 @@
+- if @post.kind_of?(RPost)
+  - disclaimer = "#{t('interface.post')} ##{@post.rid} #{t('interface.from_thread')}"
+  - url = [url_for(controller: 'threads', action: 'show', rid: @post.r_thread.rid, format: 'html'), "&gt;&gt;#{@post.r_thread.rid}"]
+- else
+  - disclaimer = "#{t('interface.thread')} ##{@post.rid} (#{verbose_replies(@post.replies_count)})"
+
+
+#mod_interface
+  %h3
+    = disclaimer
+    - if @post.kind_of?(RPost)
+      %a{href: url[0]}= url[1].html_safe
+  = render(partial: 'threads/post', object: @post)
+  = form_tag(url_for(action: 'banhammer'), method: 'post', class: 'post') do
+    %input{type: 'hidden', name: "posts[#{@post.rid}]", value: 'on'}
+    .errors= render(partial: 'threads/errors')
+    %input{type: 'checkbox', name: 'delete_single', id: 'delete_single'}
+    %label{for: 'delete_single'}= t('interface.delete_single')
+    %br
+    - unless @post.ip_id == nil
+      %label
+        %input{type: 'checkbox', name: 'delete_many', id: 'delete_many'}
+        = t('interface.delete_many')
+      %input{type: 'text', name: 'minutes', class: 'minutes', value: 30}
+        = t('interface.delete_minutes')
+      %br
+      %label{for: 'ban_checkbox'}
+        %input{type: 'checkbox', name: 'ban', id: 'ban_checkbox'}
+        = t('interface.ban1')
+      %input{type: 'text', name: 'ban_days', id: 'ban_days', value: 3}
+      = t('interface.ban2')
+      %br
+    %label
+      = "#{t('log.reason')}:"
+      %input{type: 'text', name: 'ban_reason', id: 'ban_reason'}
+    %br
+    %input{class: 'submit_button', type: 'submit', value: "уебать банхаммером"}
+  .view_by
+    %a{href: url_for(action: 'view_many', by: @post.password, trailing_slash: true)}<>
+      просмотреть все посты с этим паролем
+    - unless @post.ip_id == nil
+      %a{href: url_for(action: 'view_many', by: @post.ip.address, trailing_slash: true)}<>
+        просмотреть все посты с этим IP
+    %a{href: url_for(action: 'view_many', by: 'all', trailing_slash: true)}<>
+      просмотреть вообще все последние
+  - if @post.kind_of?(RThread)
+    = form_tag(url_for(action: 'update_tags', rid: @post.rid), method: 'post', class: 'post') do
+      .errors= render(partial: 'threads/errors')
+      %center
+        %input{type: 'text', name: 'tags', value: @post.tags_aliases.join(' ')}
+      %input{class: 'submit_button', type: 'submit', value: "обновить тэги"}
+    

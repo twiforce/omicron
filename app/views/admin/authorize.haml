@@ -1,0 +1,11 @@
+#authorization_box.graybox
+  -if flash[:error]
+    .errors= flash[:error]
+  = form_for(Moder.new, url: url_for(action: 'authorize'), html: {method: 'post'}) do |f|
+    = f.password_field(:password, class: 'password')
+    %br
+    %img{src: url_for(controller: 'captcha', action: 'generate_image', key: session[:captcha_key]), alt: t('interface.captcha')}
+    %br
+    %input{type: 'text', name: 'captcha_word', class: 'captcha_word'}
+    %br
+    %input{type: 'submit', class: 'submit', value: t('interface.login')}

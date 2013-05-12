@@ -1,0 +1,9 @@
+%html
+  %body
+    It looks like someone's just posted a sage message with a picture
+    on Freeport 7! 
+    = "Post ID is #{@post.rid}"
+    %br
+    Picture preview:
+    %br
+    %img{src: "http://freeport7.org#{@post.r_file.url_small}"}"

@@ -1,0 +1,19 @@
+#admin_logs
+  #full_form_button
+    = t('log.disclaimer')
+    -if @logs.empty?
+      %br
+      = t('log.disclaimer_empty')
+    - if @p.spamtxt_enabled
+      .errors
+        Внимание!
+        %br
+        Сейчас включен вайп-фильтр. Это значит, что некоторые фразы не пропускаются в сообщения, 
+        а те, кто их пишут, автоматически становятся забанены на короткое время (менее суток). Также 
+        в вайп-фильтр могут попасть целые подсети вайперов. Это временное средство защиты, и 
+        автоматические баны в модлоге не отображаются.
+  %table.container
+    -@logs.each do |log|
+      %tr.log_entry
+        %td.post_info=  Verbose::date(log.created_at)
+        %td=            log.message.html_safe

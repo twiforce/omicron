@@ -1,0 +1,17 @@
+= form_tag(url_for(action: 'banhammer'), method: 'post', id: 'multiple_banhammer') do
+  .container.post
+    %input{type: 'checkbox', name: 'delete_single', id: 'delete_single'}
+    %label{for: 'delete_single'} удалить эти посты
+    %br
+    %label
+      %input{type: 'checkbox', name: 'ban', id: 'ban_checkbox'}
+      забанить этих человек на
+      %input{type: 'text', name: 'ban_days', id: 'ban_days', value: 3}
+      = t('interface.ban2')
+    %br
+    %label
+      = "#{t('log.reason')}:"
+      %input{type: 'text', name: 'ban_reason', id: 'ban_reason'}
+    %br
+    %input{class: 'submit_button', type: 'submit', value: "уебать банхаммером"}
+  = render(partial: 'threads/post', collection: @posts)

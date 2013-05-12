@@ -1,0 +1,71 @@
+#settings.admin_settings
+  %h3 Безопасность:
+  = form_tag(url_for(action: 'defence_settings'), method: 'post', id: 'defence_settings', class: 'post') do
+    - if @p.defence_mode
+      Сейчас сложная капча выдается всем подряд. Не завидую им.
+    - else
+      Сейчас сложная капча выдается только пользователям TOR'а. 
+    %br
+    %label
+      %input{type: 'checkbox', name: 'defence', checked: @p.defence_mode}
+      усложнить капчу для ВСЕХ
+    %br
+    %label
+      %input{type: 'checkbox', name: 'new_threads_to_trash', checked: @p.new_threads_to_trash}
+      отправлять все новые треды в /trash/
+    %br
+    %label
+      %input{type: 'checkbox', name: 'cookie_barrier', checked: @p.cookie_barrier}
+      включить огораживание по печенькам
+    %br
+    %br
+    %label
+      Лимит между тредами с одного IP (в секундах):
+      %input{type: 'text', name: 'thread_posting_speed', value: @p.thread_posting_speed}
+    %br
+    %label
+      Лимит между постами с одного IP (в секундах):
+      %input{type: 'text', name: 'reply_posting_speed', value: @p.reply_posting_speed}
+    %br
+    %br
+    %input{type: 'submit', value: 'применить', class: 'submit_button'}
+
+  %br
+  %br
+
+  %h3 Очистка херни:
+  = form_tag(url_for(action: 'cleanup'), method: 'post', id: 'cleanup', class: 'post') do
+    Айпишников зарегистрировано: 
+    = Ip.count
+    %br
+    Записей настроек:
+    = User.count
+    %br
+    Готовых капч: 
+    = Captcha.count
+    %br
+    Сообщений с незатертыми айпишниками:
+    = RPost.where("ip_id IS NOT NULL").count + RThread.where("ip_id IS NOT NULL").count
+    %br
+    %br
+    %input{type: 'submit', value: 'почистить старое', class: 'submit_button'}
+
+  %br
+  %br
+
+  %h3 Вайп-фильтр:
+  = form_tag(url_for(action: 'spamtxt'), method: 'post', id: 'spamtxt', class: 'post') do
+    %span.mini 
+      Каждая строка - регулярное выражение. Если под эту регулярку попадают сообщение, 
+      пароль или айпи поста, пост отклоняется, а его пароль добавляется в вайп-фильтр.
+    %br
+    %label
+      %input{type: 'checkbox', name: 'spamtxt_enabled', checked: @p.spamtxt_enabled}
+      включить вайп-фильтр
+    %br
+    %br
+    %textarea{name: "spamtxt", cols: 50, rows: 20}
+      - @p.spamtxt.each do |line|
+        = line.inspect.gsub!('/', '')
+    %br
+    %input{type: 'submit', value: 'применить', class: 'submit_button'}

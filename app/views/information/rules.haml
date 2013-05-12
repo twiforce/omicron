@@ -1,0 +1,11 @@
+#information_container
+  #topiclist
+    %a{href: url_for(action: 'index', trailing_slash: 'true')}
+      = t('info.index')
+    %a{href: url_for(action: 'engine')}
+      = t('info.engine')      
+    %a{href: url_for(action: 'rules'), class: 'active'}
+      = t('info.rules')
+    %a{href: url_for(action: 'contacts')}
+      = t('info.contacts')
+  = render(partial: 'rules')

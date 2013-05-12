@@ -1,0 +1,7 @@
+#full_form_button
+  Кажется, наш сайт подвергся атаке. Из-за этого меры безопасности ужесточены.
+  %br
+  Извините за временные неудобства.
+- @tag = '~'
+#defence_form_container
+  = render(partial: 'form', locals: {url: url_for(action: 'create')})

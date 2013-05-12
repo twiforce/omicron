@@ -1,0 +1,11 @@
+.editbox
+  %b=             t 'interface.bold'
+  %i=             t 'interface.italic'
+  %u=             t 'interface.underline'
+  %s=             t 'interface.strike'
+  %span.quote=    t 'interface.quote'
+  %span.spoiler=  t 'interface.spoiler'
+  %a.link_tag=    t 'interface.link'
+  || &nbsp;
+  %a{href: url_for(controller: 'information', action: 'engine', anchor: 'markup'), target: '_blank'}
+    = t('interface.markup')

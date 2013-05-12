@@ -1,0 +1,11 @@
+.pages
+  = t('interface.pages')
+  -if pages.total_pages > 1
+    -(1..pages.total_pages).each do |page|
+      -cls  = nil
+      -cls  = 'current' if page == pages.current_page
+      -u    = url_for(action: 'index', page: page)
+      -u    = url_for(:root) if page == 1
+      %a{class: cls, href: u}= page
+  -else
+    %a.current{href: '.'}= 1

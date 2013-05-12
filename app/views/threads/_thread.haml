@@ -1,0 +1,131 @@
+- url = url_for(controller: 'threads', action: 'show', rid: thread.rid, format: 'html')
+- if params[:action] == 'show'
+  - cls = nil
+  - id = 'thread_container'
+- else
+  - cls = 'thread_container'
+  - id = nil
+- tags_hidden = Array.new
+- thread.tags.each do |tag|
+  - if @user.hidden.include?(tag.alias) and @tag != tag
+    - tags_hidden << tag.alias
+
+%div{id: id, class: cls}
+  - if (@user.hidden.include?(thread.rid) or not tags_hidden.empty?) and not ['live', 'show'].include?(params[:action])
+    .thread.hidden{id: "i#{thread.rid}"}
+      .hidden_disclaimer
+        = "#{t('interface.hidden1')}"
+        %a{href: url_for(action: 'show', rid: thread.rid, format: 'html')}<
+          ="##{thread.rid}"
+        &mdash;
+        -if thread.title.empty?
+          = "#{t('interface.no_title')},"
+        -else
+          = "«#{thread.title}»,"
+        = Verbose::replies(thread.replies_count) + ','
+        %span.taglist
+          = t('interface.tags') + ":"
+          -thread.tags.each do |tag|
+            %a{href: url_for(controller: 'threads', tag: tag.alias, trailing_slash: true)}<
+              = "/#{tag.alias}/"
+        - unless tags_hidden.empty?
+          &nbsp;
+          %i= "(вами скрыты тэги: #{tags_hidden.join(', ')})"
+        - else
+          %a{href: url_for(controller: 'threads', action: 'hide_or_unhide', rid: thread.rid), title: 'Показать', class: 'hide_button'}
+            = image_tag('unhide.png')
+  - else
+    .thread{id: "i#{thread.rid}"}
+      .thread_body
+        -if thread.has_file?
+          - file = thread.r_file
+          .file_container
+            - if file.video?
+              %a{href: file.url_full, target: '_blank', class: 'video_url', id: file.filename}
+                = image_tag('preload_blank.png', width: 320, height: 240, class: 'play_img')
+                %img{src: file.video_preview, width: 320, height: 240, class: 'video_preview'}
+            - else
+              - cls = 'pic_url'
+              - cls = 'non_pic_url' unless file.picture?
+              %a{href: file.url_full, target: '_blank', class: cls}
+                .pic_loading= t('interface.loading')
+                -if file.resized and file.thumb_rows != nil
+                  = image_tag(file.url_small, width: file.thumb_columns, height: file.thumb_rows)
+                -else
+                  = image_tag(file.url_small)
+            %span.file_info
+              - if file.video?
+                - if file.video_title != nil
+                  = t('interface.video')
+                  &laquo;
+                  %a{href: file.url_full, target: '_blank'}<>
+                    = file.video_title
+                  &raquo;
+                  - minutes = file.video_duration / 60
+                  - seconds = (file.video_duration - (minutes * 60)).abs
+                  - seconds = "0#{seconds}" if seconds < 10
+                  = "#{minutes}:#{seconds}"
+              - else
+                = t('interface.file') + ":"
+                %a{href: file.url_full, target: '_blank'}<
+                  = file.extension
+                = "#{file.size / 1024} Kb."
+                - if file.picture?
+                  = "&mdash; #{file.columns}×#{file.rows}".html_safe
+                  %br
+                    - find = "http://freeport7.org#{file.url_full}"
+                    Поиск:
+                    /%a{href: "http://www.google.com/searchbyimage?image_url=#{find}", target: '_blank'} Google
+                    %a{href: "http://iqdb.org/?url=#{find}", target: '_blank'} iqdb
+        %a{href: url, class: 'title'}<>
+          - if thread.title.empty?
+            = "#{t('interface.thread')} №#{thread.rid}"
+          - else
+            = thread.title
+        - t = 'Добавить в избранное'
+        - t = 'Убрать из избранного' if @user.favorites.include?(thread.rid)
+        %a{href: url_for(controller: 'threads', action: 'toggle_fav', rid: thread.rid), title: t, class: 'fav_button'}
+          - if @user.favorites.include?(thread.rid)
+            = image_tag('star_gold.png')
+          - else
+            = image_tag('star_black.png')
+        - if params[:action] != 'show'
+          %a{href: url_for(controller: 'threads', action: 'hide_or_unhide', rid: thread.rid), title: 'Скрыть', class: 'hide_button'}
+            = image_tag('hide.png')
+        %a{href: url + "##{thread.rid}", title: 'Быстрый ответ', class: 'qr_link'}
+          = image_tag('reply.png')
+        %span.thread_info
+          = Verbose::date(thread.created_at) + ', '
+          %span.taglist
+            = t('interface.tags') + ":"
+            -thread.tags.each do |tag|
+              %a{href: url_for(controller: 'threads', tag: tag.alias, trailing_slash: true), title: tag.name}<
+                = tag.alias
+          - if thread.created_at > (Time.now - 3.minutes) or @moder
+            .manage_container
+              %a{href: '#', class: 'manage_button'} ×
+              .manage_menu
+                - if thread.created_at > (Time.now - 3.minutes)
+                  %a{href: url_for(controller: 'threads', action: 'delete', rid: thread.rid), class: 'delete_button'} удалить
+                  %a{href: url_for(controller: 'threads', action: 'edit', rid: thread.rid), class: 'edit_button'} редактировать
+                - if @moder
+                  %a{href: url_for(controller: 'admin', action: 'view_single', rid: thread.rid)} модерка
+        %blockquote= thread.message.html_safe
+        -if params[:controller] == 'threads'
+          -unless thread.replies_rids.empty?
+            .replies_rids
+              = "#{t('interface.replies_rids')}:  "
+              -thread.replies_rids.each do |rid|
+                -u = url_for(controller: 'threads', action: 'show', rid: rid[:thread], anchor: "i#{rid[:post]}", format: 'html')
+                .post_link
+                  %a{href: u}<
+                    = "&gt;&gt;#{rid[:post]}".html_safe
+                  = " "            
+      - if ['index', 'page', 'favorites', 'hide_or_unhide'].include?(params[:action])
+        - if thread.replies_count > @user.settings[:posts_per_thread]
+          .omitted
+            %a{href: url_for(controller: 'threads', action: 'expand', rid: thread.rid), class: 'expand_button', title: 'развернуть'}
+              = Verbose::replies(thread.replies_count - @user.settings[:posts_per_thread])
+              спустя:
+    - if ['index', 'page', 'favorites', 'hide_or_unhide'].include?(params[:action])
+      = render(partial: 'post', collection: thread.r_posts.order('created_at DESC').limit(@user.settings[:posts_per_thread]).reverse)

@@ -1,0 +1,8 @@
+-cache('not_found') do
+  #not_found
+    %h1 404 
+    %p= t('interface.not_found')
+    %br
+    %a{href: url_for(:root), class: 'back_link'}<>
+      ←&nbsp;
+      = t('interface.back')

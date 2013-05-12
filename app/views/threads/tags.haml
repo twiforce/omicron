@@ -1,0 +1,8 @@
+#taglist_noscript
+  %a{href: url_for(controller: 'threads', action: 'index', tag: '~', trailing_slash: true)}
+    %span="/~/"
+    = t('title.overview')
+  -Tag.all.each do |tag|
+    %a{href: url_for(controller: 'threads', action: 'index', tag: tag.alias, trailing_slash: true)}
+      %span="/#{tag.alias}/"
+      = tag.name

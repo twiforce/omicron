@@ -1,0 +1,22 @@
+%center
+  #ban_disclaimer
+    %h2 
+      -if @ban.level == 1
+        Доступ к отправке сообщений с этого IP закрыт.
+      -else
+        Доступ к сайту с этого IP закрыт.
+    .div
+      Причина: 
+      = "#{@ban.reason}."
+      -if @ban.expires
+        %br
+        -if @ban.level == 1
+          Вы сможете снова отправлять сообщения  
+        -else
+          Вы сможете заходить, начиная с
+        = verbose_date(@ban.expires) + "."
+      %br
+      Можно это обжаловать, написав в джаббер
+      %a{href: "mailto:edison.trent@freeport7.org"}
+        edison.trent@freeport7.org
+    = image_tag 'varg.png'

@@ -1,0 +1,109 @@
+!!!
+%html
+  %head
+    %title= "#{t('interface.html_title')} - #{@html_title}"
+    %meta{:'http-equiv' => 'Content-Type', content: 'text/html; charset=utf-8'}
+    = csrf_meta_tags
+    = stylesheet_link_tag('omicron', :media => 'all')
+    - unless [nil, 'omicron'].include?(@user.settings[:style])
+      = stylesheet_link_tag(@user.settings[:style], media: 'all')
+    = javascript_include_tag('omicron')
+    %script{type: 'text/javascript'}
+      = "var defence_mode = #{@p.defence_mode};"
+      = "var action = '#{params[:action]}';"
+      = "var controller = '#{params[:controller]}';"
+      = "var up_button_enabled = #{@user.settings[:show_up_button]};"
+      = "var scroll_after_post = #{(@user.settings[:scroll_after_post] or true)};"
+      = "var full_hiding = #{(@user.settings[:full_hiding] or false)};"
+      - @user.settings[:autorefresh_enabled] = true if @user.settings[:autorefresh_enabled] == nil
+      = "var autorefresh_enabled = #{@user.settings[:autorefresh_enabled]};"
+    / 
+      This is Freeport 7 to Freelancer, alpha one dash one.
+      ="This page is rendered in #{sprintf('%.3f', (Time.now.usec - @start_time).abs / 1000000.0)} sec."
+      You are clear to launch. Good luck out there.
+    %style{type: 'text/css'}
+      - if @user.settings[:fixed_header] == false
+        header { position: relative;  display: block; width: auto; padding-bottom: 7px }
+        \#full_form_button { margin-top: 0px }
+      - if @user.settings[:fontsize]
+        = ".post blockquote, .thread blockquote { font-size: #{@user.settings[:fontsize]}px !important; }"
+      - if @user.settings[:enable_maxwidth] == false
+        = ".thread_container { max-width: none; }"
+      - if @user.settings[:enable_shadows] == false
+        \#full_form_button, .thread, .post, header, #taglist, #bottom_menu, #qr_form, #taglist, #refreshing_message, .manage_menu {
+        box-shadow: none;
+        }
+        header {
+        border-bottom: 1px solid #888
+        }
+  %body
+    #previews
+    #taglist
+      - stl = nil
+      - stl = 'selected' if @tag == '~' and params[:action] != 'favorites'
+      %a{href: url_for(controller: 'threads', action: 'index', tag: '~', trailing_slash: true), id: 'overview_tag', class: stl}
+        %span="/<tt>~</tt>/".html_safe
+        = t('title.overview')          
+      %table
+        - tags = Tag.all.to_a
+        - 0.upto(Tag.count / 2) do |row|
+          %tr
+            - [ tags[0], tags[1] ].each do |tag|
+              %td
+                - if tag
+                  - tags.delete(tag)
+                  - stl = nil
+                  - stl = 'selected' if @tag == tag
+                  %a{href: url_for(controller: 'threads', action: 'index', tag: tag.alias, trailing_slash: true), class: stl}
+                    %span="/<tt>#{tag.alias}</tt>/".html_safe
+                    = tag.name
+    %header
+      %h3
+        %a{href: url_for(:root)}= t('interface.main_title')
+      #posting_info
+        = "за сегодня сообщений: <span>#{@posts_today}</span>, онлайн: ".html_safe
+        %b= @online
+      %menu
+        %li
+          -cls = nil
+          -cls = ' active' if params[:controller] == 'threads' and ['index', 'page'].include?(params[:action])
+          %a{href: url_for(controller: 'threads', action: 'tags', trailing_slash: true), class: cls, id: 'tags'}
+            = t('interface.tags') + " ↓"
+        %li
+          -cls = nil
+          -cls = 'active' if params[:controller] == 'settings'
+          %a{href: url_for(controller: 'settings', action: 'index', trailing_slash: true), class: cls}
+            = t('interface.user_settings')
+        %li
+          -cls = nil
+          -cls = 'active' if params[:controller] == 'information'
+          %a{href: url_for(controller: 'information', action: 'index', trailing_slash: true), class: cls}
+            = t('interface.information')
+        %li
+          -cls = nil
+          -cls = 'active'  if params[:controller] == 'threads' and params[:action] == 'favorites'
+          %a{href: url_for(controller: 'threads', action: 'favorites', trailing_slash: true), class: cls}
+            = t('interface.favorites')
+        %li
+          - cls = nil
+          - cls = 'active'  if params[:controller] == 'threads' and params[:action] == 'live'
+          %a{href: url_for(controller: 'threads', action: 'live', trailing_slash: true), class: cls}<> live!
+      #flash_message
+        - if flash[:message] 
+          = flash[:message].html_safe
+          
+    %section#main_container
+      - if params[:controller] == 'threads' and @p.new_threads_to_trash
+        #popup_message
+          %b{style: 'color: red'} Внимание!
+          %a{class: 'fake_link', id: 'close_popup'} ×
+          %br
+          Люди с анальными болями пытаются навредить борде вайпом. Поэтому все новые треды
+          временно отсылаются в /trash/ автоматически. Рекомендуем вам
+          %a{href: url_for(controller: 'settings', action: 'index', trailing_slash: true)}= "скрыть"
+          тэг /trash/ и общаться в старых тредах, пока детишки не угомонятся.
+      = yield      
+
+    %footer
+      Omicron
+      = VERSION 

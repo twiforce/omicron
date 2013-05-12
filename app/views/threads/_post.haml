@@ -1,0 +1,110 @@
+- if post.kind_of?(RPost)
+  - thread_rid = post.r_thread.rid
+  - url = url_for(controller: 'threads', action: 'show', rid: thread_rid, format: 'html', anchor: "i#{post.rid}")
+- else
+  - url = url_for(controller: 'threads', action: 'show', rid: post.rid, format: 'html', anchor: "i#{post.rid}")
+
+- cls = ''
+- cls = ' hidden' if @user.hidden.include?(post.rid)
+%div{class: 'post_container' + cls}
+  .post{id: "i#{post.rid}", timestamp: post.created_at.to_i, thread: thread_rid}
+    - if @user.hidden.include?(post.rid)
+      .hidden_disclaimer
+        ="##{post.rid} &mdash; скрытый пост.".html_safe
+        %a{href: url_for(controller: 'threads', action: 'hide_or_unhide', rid: post.rid), class: 'hide_button'} показать
+    - else
+      -if params[:controller] == 'admin' and params[:action] == 'view_many'
+        %input{type: 'checkbox', name: "posts[#{post.rid}]"}
+      -if params[:action] == 'reply'
+        -if @show_captcha
+          .i_need_captcha{style: 'display: none'}
+            op hui
+      .post_header
+        %span
+          %a{href: url, class: 'post_link'}<>
+            = "##{post.rid}"
+        %span.title= post.title
+        %span
+          = Verbose::date(post.created_at)
+        - if post.kind_of?(RPost)
+          - if post.sage
+            %span.sage sage
+        - else
+          %span= "(#{t('interface.thread')} - #{Verbose::replies(post.replies_count)})"
+        .manage_container
+          %a{href: '#', class: 'manage_button'} ×
+          .manage_menu
+            %a{href: url_for(controller: 'threads', action: 'hide_or_unhide', rid: post.rid), class: 'hide_button'} скрыть
+            - if post.created_at > (Time.now - 3.minutes)
+              %a{href: url_for(controller: 'threads', action: 'delete', rid: post.rid), class: 'delete_button'} удалить пост
+              - if post.has_file?
+                %a{href: url_for(controller: 'threads', action: 'delete', rid: post.rid), class: 'delete_file_button'} удалить файл
+              %a{href: url_for(controller: 'threads', action: 'edit', rid: post.rid), class: 'edit_button'} редактировать
+            - if @moder
+              %a{href: url_for(controller: 'admin', action: 'view_single', rid: post.rid)} модерка
+        - if @moder and params[:controller] == 'admin'
+          &nbsp;
+          %span.mini
+            = "#{t('interface.password')}: #{post.password}"
+            - if post.ip_id != nil
+              &nbsp;&nbsp;&nbsp;
+              = "IP: #{post.ip.address}"
+        - if params[:action] == 'live' and post.kind_of?(RPost)
+          - name = post.r_thread.title
+          - name = post.r_thread.message if name.empty?
+          - name.gsub!(/<.+>/, ' ')
+          - name = name[0..43] + "..." if name.length > 45
+          .context_link
+            %a{href: url_for(controller: 'threads', action: 'show', rid: thread_rid, format: 'html', anchor: "i#{thread_rid}")}<>
+              = name
+      .post_body
+        - if post.has_file?
+          - file = post.r_file
+          .file_container
+            - if file.video?
+              %a{href: file.url_full, target: '_blank', class: 'video_url', id: file.filename}
+                = image_tag('preload_blank.png', width: 320, height: 240, class: 'play_img')
+                %img{src: file.video_preview, width: 320, height: 240, class: 'video_preview'}
+            - else
+              - cls = 'pic_url'
+              - cls = 'non_pic_url' unless file.picture?
+              %a{href: file.url_full, target: '_blank', class: cls}
+                .pic_loading= t('interface.loading')
+                -if file.resized and file.thumb_rows != nil
+                  = image_tag(file.url_small, width: file.thumb_columns, height: file.thumb_rows)
+                -else
+                  = image_tag(file.url_small)
+            %span.file_info
+              - if file.video?
+                - if file.video_title != nil
+                  = t('interface.video')
+                  &laquo;
+                  %a{href: file.url_full, target: '_blank'}<>
+                    = file.video_title
+                  &raquo;
+                  - minutes = file.video_duration / 60
+                  - seconds = (file.video_duration - (minutes * 60)).abs
+                  - seconds = "0#{seconds}" if seconds < 10
+                  = "#{minutes}:#{seconds}"
+              - else
+                = t('interface.file') + ":"
+                %a{href: file.url_full, target: '_blank'}<
+                  = file.extension
+                = "#{file.size / 1024} Kb."
+                - if file.picture?
+                  = "&mdash; #{file.columns}×#{file.rows}".html_safe
+                  %br
+                    - url = "http://freeport7.org#{file.url_full}"
+                    Поиск:
+                    / %a{href: "http://www.google.com/searchbyimage?image_url=#{url}", target: '_blank'} Google
+                    %a{href: "http://iqdb.org/?url=#{url}", target: '_blank'} iqdb
+        %blockquote= post.message.html_safe
+        -unless post.replies_rids.empty?
+          .replies_rids
+            = "#{t('interface.replies_rids')}:  "
+            -post.replies_rids.each do |rid|
+              -url = url_for(controller: 'threads', action: 'show', rid: rid[:thread], anchor: "i#{rid[:post]}", format: 'html')
+              .post_link
+                %a{href: url}<
+                  = "&gt;&gt;#{rid[:post]}".html_safe
+                = " "

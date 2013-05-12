@@ -1,0 +1,17 @@
+#information_container
+  #topiclist
+    %a{href: url_for(action: 'index', trailing_slash: 'true')}
+      = t('info.index')
+    %a{href: url_for(action: 'engine')}
+      = t('info.engine')      
+    %a{href: url_for(action: 'rules')}
+      = t('info.rules')
+    %a{href: url_for(action: 'contacts'), class: 'active'}
+      = t('info.contacts')
+  %blockquote{id: 'contacts'}
+    %p 
+      Создатель откликается на позывной Трент и почти всегда доступен в джаббере:
+      %a{href: "xmpp:edison.trent@freeport7.org"}
+        edison.trent@freeport7.org
+      %br
+      Пишите по любым вопросам, никто не будет проигнорирован.

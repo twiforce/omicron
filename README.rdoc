@@ -1,0 +1,2 @@
+Omicron was an imageboard engine, used on http://freeport7.org 07.09.2012 - 15.11.2012.
+It features an outdated and bad-written code, filled with bugs, very slow and vulnerable to DDoS attacks. Do not use it.

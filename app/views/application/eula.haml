@@ -1,0 +1,15 @@
+#eula
+  #information_container
+    %center
+      %h1 Добро пожаловать на Freeport7.org!
+    = render(partial: 'information/rules')
+    #not_agree
+      %a{href: "http://google.com"}<> НЕТ!
+      %br
+      Я не согласен с вашими правилами. 
+      %br
+      Пойду куда-нибудь в другое место.
+    #agree
+      = form_tag(url_for(:root), method: 'post') do 
+        %input{type: 'submit', value: 'ОК.'}
+      Я соглашаюсь с правилами и подтверждаю, что я совершеннолетний человек.

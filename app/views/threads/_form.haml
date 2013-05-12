@@ -1,0 +1,53 @@
+- stl = nil
+- stl = 'display: none' if params[:action] == 'live'
+= form_tag(url, id: 'qr_form', method: 'post', multipart: true, style: stl) do 
+  - if params[:action] == 'index'
+    %input{type: 'hidden', name: 'from_index', value: 1}  
+  %input{type: 'hidden', name: 'ajax', value: 'disabled', class: 'ajax_detector'}
+  .divider.errors= @errors
+  .divider.disclaimer
+  .divider
+    %input{name: 'message[title]', type: 'text', placeholder: t('placeholder.title'), class: 'form_title'}
+    %input{type: 'submit', class: 'form_submit', value: t('interface.submit')}
+  .divider
+    = render(partial: 'editbox')
+  .divider
+    %textarea{name: 'message[message]', placeholder: t('placeholder.message')}
+  .divider.mini
+    .left
+      %span{id: 'file_span', class: 'selected'}= "#{t('interface.file')}"        
+      &nbsp;/&nbsp;
+      %span{id: 'video_span'}= "YouTube"
+      %span
+        %input{name: 'message[file]', type: 'file', class: 'file_field'}
+      %input{name: 'video', type: 'text', class: 'video_field'}
+    .right
+      - stl = nil
+      - stl = 'display:none' if params[:action] != 'show'
+      %label{id: 'sage', style: stl}
+        = "#{t('interface.sage')}: "
+        %input{name: 'message[sage]', type: 'checkbox'}
+      -unless params[:action] == 'show'
+        %label#form_tags
+          - if @tag == '~'
+            - val = 'b'
+          - elsif params[:action] == 'live'
+            - val = ''
+          - else
+            - val = @tag.alias
+          = t('interface.tags') + ':'
+          %input{type: 'text', name: 'tags', id: 'tag_field', value: val}
+      %label
+        = "#{t('interface.password')}: "
+        %input{name: 'message[password]', class: 'password_field', value: @password, type: 'password'}
+  - if (@ip.post_captcha_needed or (@p.defence_mode or @enemy)) and not @moder
+    - stl = nil
+    - src = url_for(controller: 'captcha', action: 'generate_image', key: session['captcha_key'])
+  - else
+    - stl = 'display: none'
+    - src = '/favicon.ico'
+  .captcha_field{style: stl}
+    %img{src: src, alt: 'captcha', class: 'captcha_image'}
+    %input{type: 'text', name: 'captcha_word', class: 'captcha_word', placeholder: t('placeholder.captcha')}
+    - if @enemy
+      %span Вы используете TOR, поэтому капча для вас усложнена.

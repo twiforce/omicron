@@ -1,0 +1,29 @@
+!!!
+%html
+  %head
+    %title Freeport 7
+    %meta{:'http-equiv' => 'Content-Type', content: 'text/html; charset=utf-8'}
+    = csrf_meta_tags
+    = javascript_include_tag('omicron')
+    = stylesheet_link_tag('omicron-glagne', :media => 'all')
+    %style{type: 'text/css'}
+      = "#main { background: url(backgrounds/#{rand(1..5)}.jpg) 50% 64% }"
+      = "#main { min-height: 800px; min-width: 740px }"
+      = "html, body, #main { width: 100%; height: 100%; margin: 0; padding: 0 }"
+  %body
+    #main
+      #container
+        #information.blackbox
+          %center
+            %h1 Добро пожаловать на Freeport7.org!
+          = render(partial: 'information/rules')
+          #not_agree
+            %a{href: "http://google.com"}<> НЕТ!
+            %br
+            Я не согласен с вашими правилами. 
+            %br
+            Пойду куда-нибудь в другое место.
+          #agree
+            = form_tag(url_for(:root), method: 'post') do 
+              %input{type: 'submit', value: 'ОК.'}
+            Я соглашаюсь с правилами и подтверждаю, что я совершеннолетний человек.

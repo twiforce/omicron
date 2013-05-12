@@ -1,0 +1,8 @@
+= render(partial: 'bottom_menu')  
+= render(partial: 'form', locals: {url: url_for(action: 'create')})
+#full_form_button.canceled
+  / %h1 Omicron LIVE!
+  / %center.mini прямой эфир
+  / Тут в режиме реального времени показываются последние сообщения.
+#live_container
+  = render(partial: 'live_update', object: @content)

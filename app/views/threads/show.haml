@@ -1,0 +1,17 @@
+-url = url_for(action: 'reply', rid: @thread.rid)
+= render(partial: 'bottom_menu')  
+#full_form_button.canceled
+  = render(partial: 'form', locals: {url: url})
+
+%a{href: url_for(:root), class: 'back_link'}
+  ←&nbsp;
+  = t('interface.back')
+
+#thread_container
+  = render(partial: 'thread', object: @thread)
+  = render(partial: 'post', collection: @thread.r_posts)
+
+%br
+%a{href: url_for(:root), class: 'back_link'}
+  ←&nbsp;
+  = t('interface.back')
